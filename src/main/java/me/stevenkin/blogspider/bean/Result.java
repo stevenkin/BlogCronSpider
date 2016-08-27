@@ -8,13 +8,13 @@ import java.util.List;
  */
 public class Result {
     private List<Blog> blogList = new LinkedList<>();
-    private List<String> linkList = new LinkedList<>();
+    private List<Link> linkList = new LinkedList<>();
 
     public List<Blog> getBlogList() {
         return blogList;
     }
 
-    public List<String> getLinkList() {
+    public List<Link> getLinkList() {
         return linkList;
     }
 
@@ -22,7 +22,7 @@ public class Result {
         this.blogList.add(blog);
     }
 
-    public void addLink(String link){
+    public void addLink(Link link){
         this.linkList.add(link);
     }
 }

@@ -16,7 +16,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class HttpClientUtil {
     public static CloseableHttpClient createHttpsClient(){
-        try {
+        /*try {
             SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
                 @Override
                 public boolean isTrusted(java.security.cert.X509Certificate[] x509Certificates, String s) throws java.security.cert.CertificateException {
@@ -31,7 +31,7 @@ public class HttpClientUtil {
             e.printStackTrace();
         } catch (KeyStoreException e) {
             e.printStackTrace();
-        }
+        }*/
         return  HttpClients.createDefault();
     }
 }

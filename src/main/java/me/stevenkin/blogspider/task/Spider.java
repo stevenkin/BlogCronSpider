@@ -7,7 +7,6 @@ import me.stevenkin.blogspider.util.HttpClientUtil;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,7 +33,7 @@ public class Spider {
             HttpGet get = new HttpGet(link);
             CloseableHttpResponse response = httpclient.execute(get);
             if(response.getStatusLine().getStatusCode()==200){
-                String html = EntityUtils.toString(response.getEntity());
+                String html = EntityUtils.toString(response.getEntity(),EntityUtils.getContentCharSet(response.getEntity()));
                 Result result = parse(html);
                 for(Blog blog:result.getBlogList()){
                     System.out.println(blog);
@@ -60,8 +59,11 @@ public class Spider {
             blog.setTitle(title);
             result.addBlog(blog);
         }
-        String nextLink = BASIC_URL+document.select("li.next a").first().attr("href");
-        result.addLink(nextLink);
+        Element nextElem = document.select("li.next a").first();
+        if(nextElem!=null) {
+            String nextLink = BASIC_URL+nextElem.attr("href");
+            result.addLink(nextLink);
+        }
         return result;
     }
 
