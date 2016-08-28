@@ -10,10 +10,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -29,15 +26,20 @@ public class Spider implements Runnable {
     private LinkQueue linkQueue;
     @Autowired
     private List<AbstractPageParser> parserList;
+    @Autowired
+    private PipeLine pipeLine;
 
     private Map<String,PageParser> map = new HashMap<>();
 
     private CountDownLatch countDownLatch;
 
+    private Set<String> allWebSites = new HashSet<>();
+
     @PostConstruct
     public void init(){
         for(AbstractPageParser parser:parserList){
             map.put(parser.getWebSite(),parser);
+            allWebSites.add(parser.getWebSite());
         }
     }
 
@@ -47,7 +49,7 @@ public class Spider implements Runnable {
             Link link = this.linkQueue.getLink();
             if(link==null)
                 continue;
-            if(link.isEnd()){
+            if(link.isEnd()&&allWebSites.remove(link.getLink())){
                 this.countDownLatch.countDown();
                 continue;
             }
@@ -67,6 +69,7 @@ public class Spider implements Runnable {
                     for(Link link1:result.getLinkList()){
                         linkQueue.addLink(link1);
                     }
+                    pipeLine.processResult(result);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -83,5 +86,41 @@ public class Spider implements Runnable {
     public Spider countDownLatch(CountDownLatch countDownLatch){
         this.countDownLatch = countDownLatch;
         return this;
+    }
+
+    public boolean isStop() {
+        return isStop;
+    }
+
+    public CloseableHttpClient getHttpClient() {
+        return httpClient;
+    }
+
+    public RequestConfig getRequestConfig() {
+        return requestConfig;
+    }
+
+    public LinkQueue getLinkQueue() {
+        return linkQueue;
+    }
+
+    public List<AbstractPageParser> getParserList() {
+        return parserList;
+    }
+
+    public PipeLine getPipeLine() {
+        return pipeLine;
+    }
+
+    public Map<String, PageParser> getMap() {
+        return map;
+    }
+
+    public CountDownLatch getCountDownLatch() {
+        return countDownLatch;
+    }
+
+    public Set<String> getAllWebSites() {
+        return allWebSites;
     }
 }

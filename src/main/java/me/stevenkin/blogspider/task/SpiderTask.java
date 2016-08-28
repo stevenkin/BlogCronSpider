@@ -19,12 +19,12 @@ import java.util.Queue;
 /**
  * Created by Administrator on 2016/8/24.
  */
-public class Spider {
+public class SpiderTask {
     private static final String BASIC_URL = "https://segmentfault.com";
     private Queue<String> linkQueue = new LinkedList<>();
     private CloseableHttpClient httpclient = HttpClientUtil.createHttpsClient();
 
-    public Spider(){
+    public SpiderTask(){
         linkQueue.add("https://segmentfault.com/blogs/newest");
     }
     public void run() throws Exception {
@@ -69,7 +69,7 @@ public class Spider {
 
     public static void main(String[] args){
         try {
-            new Spider().run();
+            new SpiderTask().run();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -22,7 +22,6 @@ http://www.springframework.org/schema/beans ">
         <property name="connectionManager" ref="connectionManager"/>
     </bean>
 
-    <!--定义httpClient对象，该bean一定是多例的-->
     <bean id="httpClient" class="org.apache.http.impl.client.CloseableHttpClient" factory-bean="httpClientBuilder"
           factory-method="build" scope="prototype"></bean>
     <!--定义requestConfig构建器-->
