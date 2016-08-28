@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="cronTask" class="me.stevenkin.blogspider.task.CronTask" init-method="init">
+        <property name="threadNum" value="${spider.threadNum}"/>
+        <property name="startLinks">
+            <list>
+                <value>https://segmentfault.com/blogs/newest</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="job" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="cronTask" />
+        <property name="targetMethod" value="run" />
+    </bean>
+    <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="job" />
+        <property name="cronExpression" value="0 31 18 * * ?" />
+    </bean>
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="cronTrigger" />
+            </list>
+        </property>
+        <property name="autoStartup" value="true" />
+    </bean>
+</beans>

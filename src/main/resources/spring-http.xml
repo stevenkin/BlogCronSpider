@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-http://www.springframework.org/schema/beans ">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location">
-            <value>properties/http.properties</value>
+        <property name="locations">
+            <list>
+            <value>classpath*:properties/http.properties</value>
+            <value>classpath*:properties/spider.properties</value>
+            </list>
         </property>
     </bean>
     <!--定义连接管理器-->
@@ -34,6 +36,6 @@ http://www.springframework.org/schema/beans ">
         <property name="socketTimeout" value="${http.socketTimeout}"/>
     </bean>
     <!--请求参数对象-->
-    <bean class="org.apache.http.client.config.RequestConfig" factory-bean="requestConfigBuilder"
+    <bean id="requestConfig" class="org.apache.http.client.config.RequestConfig" factory-bean="requestConfigBuilder"
           factory-method="build"></bean>
 </beans>

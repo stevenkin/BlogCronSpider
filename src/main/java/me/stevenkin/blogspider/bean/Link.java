@@ -5,7 +5,12 @@ package me.stevenkin.blogspider.bean;
  */
 public class Link {
     private String link;
-    private boolean isEnd;
+    private boolean isSkip;
+
+    public Link(String link, boolean isSkip) {
+        this.link = link;
+        this.isSkip = isSkip;
+    }
 
     public String getLink() {
         return link;
@@ -15,11 +20,11 @@ public class Link {
         this.link = link;
     }
 
-    public boolean isEnd() {
-        return isEnd;
+    public boolean isSkip() {
+        return isSkip;
     }
 
-    public void setEnd(boolean end) {
-        isEnd = end;
+    public void setIsSkip(boolean isSkip) {
+        isSkip = isSkip;
     }
 }

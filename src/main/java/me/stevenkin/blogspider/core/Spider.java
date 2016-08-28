@@ -7,39 +7,32 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by Administrator on 2016/8/26.
  */
 public class Spider implements Runnable {
     private volatile boolean isStop = false;
-    @Autowired
+
     private CloseableHttpClient httpClient;
-    @Autowired
+
     private RequestConfig requestConfig;
-    @Autowired
-    private LinkQueue linkQueue;
-    @Autowired
+
     private List<AbstractPageParser> parserList;
-    @Autowired
+
     private PipeLine pipeLine;
+
+    private LinkQueue linkQueue;
 
     private Map<String,PageParser> map = new HashMap<>();
 
-    private CountDownLatch countDownLatch;
-
-    private Set<String> allWebSites = new HashSet<>();
-
-    @PostConstruct
     public void init(){
+        System.out.println("spider init");
         for(AbstractPageParser parser:parserList){
             map.put(parser.getWebSite(),parser);
-            allWebSites.add(parser.getWebSite());
+            System.out.println(parser.getWebSite()+" "+parser);
         }
     }
 
@@ -49,15 +42,20 @@ public class Spider implements Runnable {
             Link link = this.linkQueue.getLink();
             if(link==null)
                 continue;
-            if(link.isEnd()&&allWebSites.remove(link.getLink())){
-                this.countDownLatch.countDown();
+            if(link.isSkip()){
                 continue;
             }
             String linkStr = link.getLink();
+            int mon = 0;
             int httpIndex = linkStr.indexOf("http://");
-            String linkStr1 = httpIndex>0?linkStr.substring(httpIndex+7):linkStr;
+            mon = 7;
+            if(httpIndex<0) {
+                httpIndex = linkStr.indexOf("https://");
+                mon = 8;
+            }
+            String linkStr1 = httpIndex>=0?linkStr.substring(httpIndex+mon):linkStr;
             int index = linkStr1.indexOf("/");
-            String linkStr2 = index>0?linkStr1.substring(0,index):linkStr1;
+            String linkStr2 = index>=0?linkStr1.substring(0,index):linkStr1;
             PageParser parser = map.get(linkStr2);
             HttpGet get = new HttpGet(linkStr);
             get.setConfig(this.requestConfig);
@@ -78,49 +76,51 @@ public class Spider implements Runnable {
         }
     }
 
-    public Spider stop(boolean isStop){
-        this.isStop = isStop;
-        return this;
-    }
-
-    public Spider countDownLatch(CountDownLatch countDownLatch){
-        this.countDownLatch = countDownLatch;
-        return this;
-    }
-
     public boolean isStop() {
         return isStop;
+    }
+
+    public void setStop(boolean stop) {
+        isStop = stop;
     }
 
     public CloseableHttpClient getHttpClient() {
         return httpClient;
     }
 
+    public void setHttpClient(CloseableHttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
+
     public RequestConfig getRequestConfig() {
         return requestConfig;
     }
 
-    public LinkQueue getLinkQueue() {
-        return linkQueue;
+    public void setRequestConfig(RequestConfig requestConfig) {
+        this.requestConfig = requestConfig;
     }
 
     public List<AbstractPageParser> getParserList() {
         return parserList;
     }
 
+    public void setParserList(List<AbstractPageParser> parserList) {
+        this.parserList = parserList;
+    }
+
     public PipeLine getPipeLine() {
         return pipeLine;
     }
 
-    public Map<String, PageParser> getMap() {
-        return map;
+    public void setPipeLine(PipeLine pipeLine) {
+        this.pipeLine = pipeLine;
     }
 
-    public CountDownLatch getCountDownLatch() {
-        return countDownLatch;
+    public LinkQueue getLinkQueue() {
+        return linkQueue;
     }
 
-    public Set<String> getAllWebSites() {
-        return allWebSites;
+    public void setLinkQueue(LinkQueue linkQueue) {
+        this.linkQueue = linkQueue;
     }
 }
