@@ -1,4 +1,4 @@
-package me.stevenkin.blogspider.bean;
+package me.stevenkin.blogspider.enity;
 
 /**
  * Created by Administrator on 2016/8/23.

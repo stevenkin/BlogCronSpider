@@ -1,6 +1,6 @@
 package me.stevenkin.blogspider.parser;
 
-import me.stevenkin.blogspider.bean.Blog;
+import me.stevenkin.blogspider.enity.Blog;
 import me.stevenkin.blogspider.bean.Link;
 import me.stevenkin.blogspider.bean.Result;
 import me.stevenkin.blogspider.core.AbstractPageParser;
@@ -15,8 +15,9 @@ import org.jsoup.select.Elements;
 public class SegmentfaultParser extends AbstractPageParser {
 
     private static final String BASIC_URL = "https://segmentfault.com";
+
     @Override
-    public Result parserPage(String html) {
+    public Result parserHtml(String html) {
         Result result = new Result();
         Document document = Jsoup.parse(html);
         Elements sections = document.select("section.stream-list__item");
@@ -28,7 +29,7 @@ public class SegmentfaultParser extends AbstractPageParser {
             blog.setLink(link);
             blog.setResume(resume);
             blog.setTitle(title);
-            result.addBlog(blog);
+            result.addContent(blog);
         }
         Element nextElem = document.select("li.next a").first();
         if(nextElem!=null) {

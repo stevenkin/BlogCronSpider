@@ -6,18 +6,24 @@
     <bean id="spider" class="me.stevenkin.blogspider.core.Spider" scope="prototype" init-method="init">
         <property name="httpClient" ref="httpClient"/>
         <property name="requestConfig" ref="requestConfig"/>
-        <property name="pipeLine" ref="consolePipeLine"/>
         <property name="parserList">
             <list>
                 <ref bean="segmentfaultParser" />
             </list>
         </property>
+        <property name="pipeLineList">
+            <list>
+                <ref bean="consolePipeLine" />
+            </list>
+        </property>
     </bean>
 
-    <bean id="consolePipeLine" class="me.stevenkin.blogspider.pipeline.ConsolePipeLine"/>
+    <bean id="consolePipeLine" class="me.stevenkin.blogspider.pipeline.ConsolePipeLine">
+        <property name="linkRegex" value="^https://segmentfault.com"/>
+    </bean>
 
     <bean id="segmentfaultParser" class="me.stevenkin.blogspider.parser.SegmentfaultParser">
-        <property name="webSite" value="segmentfault.com"/>
+        <property name="webSiteRegex" value="^https://segmentfault.com"/>
     </bean>
 
 </beans>

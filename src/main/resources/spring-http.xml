@@ -25,7 +25,7 @@
     </bean>
 
     <bean id="httpClient" class="org.apache.http.impl.client.CloseableHttpClient" factory-bean="httpClientBuilder"
-          factory-method="build" scope="prototype"></bean>
+          factory-method="build"></bean>
     <!--定义requestConfig构建器-->
     <bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig.Builder">
         <!--设置创建连接的最长时间-->

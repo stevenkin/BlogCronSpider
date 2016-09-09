@@ -1,6 +1,7 @@
 package me.stevenkin.blogspider.core;
 
 import me.stevenkin.blogspider.bean.Link;
+import me.stevenkin.blogspider.bean.Response;
 import me.stevenkin.blogspider.bean.Result;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -22,18 +23,24 @@ public class Spider implements Runnable {
 
     private List<AbstractPageParser> parserList;
 
+    private List<AbstractPipeLine> pipeLineList;
+
     private PipeLine pipeLine;
 
     private LinkQueue linkQueue;
 
-    private Map<String,PageParser> map = new HashMap<>();
+    private PageParser pageParser;
 
     public void init(){
         System.out.println("spider init");
-        for(AbstractPageParser parser:parserList){
-            map.put(parser.getWebSite(),parser);
-            System.out.println(parser.getWebSite()+" "+parser);
+        for(int i=0;i<parserList.size()-1;i++){
+            parserList.get(i).setNextParser(parserList.get(i+1));
         }
+        this.pageParser = parserList.get(0);
+        for(int i=0;i<pipeLineList.size()-1;i++){
+            pipeLineList.get(i).setNextPipeLine(pipeLineList.get(i+1));
+        }
+        this.pipeLine = this.pipeLineList.get(0);
     }
 
     @Override
@@ -46,24 +53,16 @@ public class Spider implements Runnable {
                 continue;
             }
             String linkStr = link.getLink();
-            int mon = 0;
-            int httpIndex = linkStr.indexOf("http://");
-            mon = 7;
-            if(httpIndex<0) {
-                httpIndex = linkStr.indexOf("https://");
-                mon = 8;
-            }
-            String linkStr1 = httpIndex>=0?linkStr.substring(httpIndex+mon):linkStr;
-            int index = linkStr1.indexOf("/");
-            String linkStr2 = index>=0?linkStr1.substring(0,index):linkStr1;
-            PageParser parser = map.get(linkStr2);
             HttpGet get = new HttpGet(linkStr);
             get.setConfig(this.requestConfig);
             try {
                 HttpResponse response = httpClient.execute(get);
                 if(response.getStatusLine().getStatusCode()==200) {
                     String html = EntityUtils.toString(response.getEntity(), EntityUtils.getContentCharSet(response.getEntity()));
-                    Result result = parser.parserPage(html);
+                    Result result = pageParser.parserPage(new Response(linkStr,html));
+                    if(result==null)
+                        continue;
+                    result.setLink(linkStr);
                     for(Link link1:result.getLinkList()){
                         linkQueue.addLink(link1);
                     }
@@ -108,12 +107,12 @@ public class Spider implements Runnable {
         this.parserList = parserList;
     }
 
-    public PipeLine getPipeLine() {
-        return pipeLine;
+    public List<AbstractPipeLine> getPipeLineList() {
+        return pipeLineList;
     }
 
-    public void setPipeLine(PipeLine pipeLine) {
-        this.pipeLine = pipeLine;
+    public void setPipeLineList(List<AbstractPipeLine> pipeLineList) {
+        this.pipeLineList = pipeLineList;
     }
 
     public LinkQueue getLinkQueue() {

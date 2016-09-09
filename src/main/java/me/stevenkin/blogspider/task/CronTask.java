@@ -24,8 +24,6 @@ public class CronTask implements ApplicationContextAware{
 
     private ExecutorService service = Executors.newCachedThreadPool();
 
-    private List<Spider> spiders = new ArrayList<>();
-
     private LinkQueue linkQueue = new LinkQueue();
 
     @Override
@@ -35,16 +33,15 @@ public class CronTask implements ApplicationContextAware{
 
     public void init(){
         System.out.println("cron task init");
+        Spider spider = (Spider) context.getBean("spider");
+        spider.setLinkQueue(linkQueue);
         for(int i=0;i<threadNum;i++){
-            spiders.add((Spider) context.getBean("spider"));
-        }
-        for(Spider spider:spiders){
-            spider.setLinkQueue(linkQueue);
             service.submit(spider);
         }
     }
 
     public void run(){
+        System.out.println("run");
         for(String link:this.startLinks){
             this.linkQueue.addLink(new Link(link,false));
         }
