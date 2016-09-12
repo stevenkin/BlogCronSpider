@@ -22,7 +22,7 @@
         <property name="linkRegex" value="^https://segmentfault.com"/>
     </bean>
 
-    <bean id="segmentfaultParser" class="me.stevenkin.blogspider.parser.SegmentfaultParser">
+    <bean id="segmentfaultParser" class="me.stevenkin.blogspider.parsers.SegmentfaultParser">
         <property name="webSiteRegex" value="^https://segmentfault.com"/>
     </bean>
 

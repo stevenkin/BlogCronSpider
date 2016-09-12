@@ -7,14 +7,8 @@ public class Blog {
     private String title;
     private String resume;
     private String link;
-    private String time;
-
-    public Blog(String title, String resume, String link, String time) {
-        this.title = title;
-        this.resume = resume;
-        this.link = link;
-        this.time = time;
-    }
+    private String site;
+    private String tags;
 
     public Blog() {
     }
@@ -43,12 +37,20 @@ public class Blog {
         this.link = link;
     }
 
-    public String getTime() {
-        return time;
+    public String getTags() {
+        return tags;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
     }
 
     @Override
@@ -57,7 +59,8 @@ public class Blog {
                 "title='" + title + '\'' +
                 ", resume='" + resume + '\'' +
                 ", link='" + link + '\'' +
-                ", time='" + time + '\'' +
+                ", site='" + site + '\'' +
+                ", tags='" + tags + '\'' +
                 '}';
     }
 }

@@ -1,9 +1,7 @@
 package me.stevenkin.blogspider.pipeline;
 
 import me.stevenkin.blogspider.core.AbstractPipeLine;
-import me.stevenkin.blogspider.enity.Blog;
 import me.stevenkin.blogspider.bean.Result;
-import me.stevenkin.blogspider.core.PipeLine;
 import org.springframework.stereotype.Service;
 
 /**

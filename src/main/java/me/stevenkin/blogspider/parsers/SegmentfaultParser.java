@@ -1,4 +1,4 @@
-package me.stevenkin.blogspider.spiders.Segmentfault.parser;
+package me.stevenkin.blogspider.parsers;
 
 import me.stevenkin.blogspider.enity.Blog;
 import me.stevenkin.blogspider.bean.Link;

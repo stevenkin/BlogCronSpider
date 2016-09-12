@@ -5,4 +5,5 @@
     <import resource="spring-http.xml"/>
     <import resource="spring-spider.xml"/>
     <import resource="spring-quartz.xml"/>
+    <import resource="spring-db.xml"/>
     </beans>

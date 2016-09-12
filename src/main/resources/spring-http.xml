@@ -7,6 +7,7 @@
             <list>
             <value>classpath*:properties/http.properties</value>
             <value>classpath*:properties/spider.properties</value>
+                <value>classpath*:properties/jdbc.properties</value>
             </list>
         </property>
     </bean>
