@@ -1,5 +1,6 @@
 package me.stevenkin.blogspider.parsers;
 
+import me.stevenkin.blogspider.bean.Response;
 import me.stevenkin.blogspider.enity.Blog;
 import me.stevenkin.blogspider.bean.Link;
 import me.stevenkin.blogspider.bean.Result;
@@ -9,12 +10,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by Administrator on 2016/8/28.
  */
 public class SegmentfaultParser extends AbstractPageParser {
 
     private static final String BASIC_URL = "https://segmentfault.com";
+
+    private String linkRegex;
 
     @Override
     public Result parserHtml(String html) {
@@ -37,5 +42,19 @@ public class SegmentfaultParser extends AbstractPageParser {
             result.addLink(new Link(nextLink,false));
         }
         return result;
+    }
+
+    @Override
+    public boolean checkParser(Response response) {
+        Pattern pattern = Pattern.compile(this.linkRegex);
+        return pattern.matcher(response.getLink()).find();
+    }
+
+    public String getLinkRegex() {
+        return linkRegex;
+    }
+
+    public void setLinkRegex(String linkRegex) {
+        this.linkRegex = linkRegex;
     }
 }

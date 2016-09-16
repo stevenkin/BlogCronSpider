@@ -15,4 +15,9 @@ public class ConsolePipeLine extends AbstractPipeLine {
             System.out.println(content);
         }
     }
+
+    @Override
+    public boolean checkProcess(Result result) {
+        return true;
+    }
 }

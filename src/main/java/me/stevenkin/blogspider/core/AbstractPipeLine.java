@@ -9,11 +9,10 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractPipeLine implements PipeLine {
     private PipeLine nextPipeLine;
-    private String linkRegex;
+
     @Override
     public void processResult(Result result) {
-        Pattern pattern = Pattern.compile(this.linkRegex);
-        if(pattern.matcher(result.getLink()).find()){
+        if(checkProcess(result)){
             process(result);
         }
         if(this.nextPipeLine!=null)
@@ -28,13 +27,5 @@ public abstract class AbstractPipeLine implements PipeLine {
 
     public void setNextPipeLine(PipeLine nextPipeLine) {
         this.nextPipeLine = nextPipeLine;
-    }
-
-    public String getLinkRegex() {
-        return linkRegex;
-    }
-
-    public void setLinkRegex(String linkRegex) {
-        this.linkRegex = linkRegex;
     }
 }

@@ -18,12 +18,10 @@
         </property>
     </bean>
 
-    <bean id="consolePipeLine" class="me.stevenkin.blogspider.pipeline.ConsolePipeLine">
-        <property name="linkRegex" value="^https://segmentfault.com"/>
-    </bean>
+    <bean id="consolePipeLine" class="me.stevenkin.blogspider.pipeline.ConsolePipeLine"/>
 
     <bean id="segmentfaultParser" class="me.stevenkin.blogspider.parsers.SegmentfaultParser">
-        <property name="webSiteRegex" value="^https://segmentfault.com"/>
+        <property name="linkRegex" value="^https://segmentfault.com"/>
     </bean>
 
 </beans>
