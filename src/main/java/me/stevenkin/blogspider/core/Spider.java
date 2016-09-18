@@ -45,7 +45,13 @@ public class Spider implements Runnable {
 
     @Override
     public void run() {
+        Random random = new Random();
         while(!this.isStop){
+            try {
+                Thread.sleep(random.nextInt(100));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Link link = this.linkQueue.getLink();
             if(link==null)
                 continue;

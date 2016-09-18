@@ -4,11 +4,11 @@ package me.stevenkin.blogspider.enity;
  * Created by Administrator on 2016/8/23.
  */
 public class Blog {
-    private String title;
-    private String resume;
-    private String link;
-    private String site;
-    private String tags;
+    private String title = "";
+    private String resume = "";
+    private String link = "";
+    private String site = "";
+    private String tags = "";
 
     public Blog() {
     }

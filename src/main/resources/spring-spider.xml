@@ -14,11 +14,16 @@
         <property name="pipeLineList">
             <list>
                 <ref bean="consolePipeLine" />
+                <ref bean="blogDBPipeLine"/>
             </list>
         </property>
     </bean>
 
     <bean id="consolePipeLine" class="me.stevenkin.blogspider.pipeline.ConsolePipeLine"/>
+
+    <bean id="blogDBPipeLine" class="me.stevenkin.blogspider.pipeline.BlogDBPipeLine">
+        <property name="blogMapper" ref="blogMapper"/>
+    </bean>
 
     <bean id="segmentfaultParser" class="me.stevenkin.blogspider.parsers.SegmentfaultParser">
         <property name="linkRegex" value="^https://segmentfault.com"/>
